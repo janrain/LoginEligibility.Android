@@ -123,8 +123,9 @@ public class PolicyCheckerTask extends AsyncTask<Void, Void, JSONObject> {
             }
             reader.close();
 
-            policyCheckerData = new JSONObject(result.toString());
-
+            if (!TextUtils.isEmpty(result)) {
+                policyCheckerData = new JSONObject(result.toString());
+            }
         } catch(MalformedURLException ex){
             Log.e(LOG_TAG, ex.getStackTrace().toString());
             throw new LEServiceException(String.format("Malformed URl Exception: %s",ex.getLocalizedMessage()));

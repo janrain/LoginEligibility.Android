@@ -93,11 +93,14 @@ public class LEService {
         task.init(taskParams, new PolicyCheckerTask.PolicyCheckerTaskCompleted(){
             @Override
             public void onPolicyCheckerTaskCompleted(JSONObject response){
-                if (response.has("errorCode")){
-                    handler.onLEServiceFailure(response);
-                }else{
-                    handler.onLEServiceSuccess(response);
+                if (response != null) {
+                    if (response.has("errorCode")){
+                        handler.onLEServiceFailure(response);
+                    }else{
+                        handler.onLEServiceSuccess(response);
+                    }
                 }
+            }
             }
         });
 
