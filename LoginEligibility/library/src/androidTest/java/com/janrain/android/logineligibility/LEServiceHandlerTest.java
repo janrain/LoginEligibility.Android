@@ -163,4 +163,23 @@ public class LEServiceHandlerTest {
 
     }
 
+    @Test
+    public void test_policyCheckerTask_empty() throws Exception {
+        testResult = null;
+        testResultError = null;
+        server.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .addHeader("Cache-Control", "no-cache")
+                .setBody(""));
+        LEService leService= new LEService();
+        leService.init(goodConfig);
+        leService.checkLoginWithToken("abcdefghijk", taskHandler);
+        signal.await();
+        server.shutdown();
+        assertNull(testResult);
+        assertTrue(testResultError.has("errorCode"));
+        assertEquals("Null or Empty Response from Policy Checker Server", testResultError.getString("errorCode"));
+
+    }
+
 }

@@ -93,10 +93,21 @@ public class LEService {
         task.init(taskParams, new PolicyCheckerTask.PolicyCheckerTaskCompleted(){
             @Override
             public void onPolicyCheckerTaskCompleted(JSONObject response){
-                if (response.has("errorCode")){
-                    handler.onLEServiceFailure(response);
+                if (response != null) {
+                    if (response.has("errorCode")){
+                        handler.onLEServiceFailure(response);
+                    }else{
+                        handler.onLEServiceSuccess(response);
+                    }
                 }else{
-                    handler.onLEServiceSuccess(response);
+                    try{
+                        JSONObject errObject = new JSONObject();
+                        errObject.put("errorCode", "Null or Empty Response from Policy Checker Server");
+                        handler.onLEServiceFailure(errObject);
+                    } catch(JSONException ex){
+                        Log.e(LOG_TAG, "Error Creating checkLogin Error JSON");
+                        throw new LEServiceException("Error Creating checkLogin Error JSON");
+                    }
                 }
             }
         });

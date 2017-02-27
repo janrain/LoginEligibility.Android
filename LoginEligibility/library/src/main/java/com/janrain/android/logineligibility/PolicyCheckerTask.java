@@ -32,6 +32,7 @@ package com.janrain.android.logineligibility;
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -123,7 +124,11 @@ public class PolicyCheckerTask extends AsyncTask<Void, Void, JSONObject> {
             }
             reader.close();
 
-            policyCheckerData = new JSONObject(result.toString());
+            if (!TextUtils.isEmpty(result.toString())) {
+                policyCheckerData = new JSONObject(result.toString());
+            }else{
+                policyCheckerData.put("errorCode", "Null or Empty Response from Policy Checker Server");
+            }
 
         } catch(MalformedURLException ex){
             Log.e(LOG_TAG, ex.getStackTrace().toString());
