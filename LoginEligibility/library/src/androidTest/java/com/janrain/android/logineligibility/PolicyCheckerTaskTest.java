@@ -172,8 +172,7 @@ public class PolicyCheckerTaskTest  {
             subjectKey.put("accessToken", "abcdefghijk");
         }catch(JSONException jex){}
         server.enqueue(new MockResponse()
-                .setResponseCode(400)
-                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .setResponseCode(200)
                 .addHeader("Cache-Control", "no-cache")
                 .setBody(""));
 
