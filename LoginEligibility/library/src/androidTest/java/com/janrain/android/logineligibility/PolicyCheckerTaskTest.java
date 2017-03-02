@@ -163,4 +163,27 @@ public class PolicyCheckerTaskTest  {
         assertEquals("some error info", testResult.getString("errorCode"));
 
     }
+
+    @Test
+    public void test_policyCheckerTask_empty() throws Exception{
+
+        JSONObject subjectKey = new JSONObject();
+        try {
+            subjectKey.put("accessToken", "abcdefghijk");
+        }catch(JSONException jex){}
+        server.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .addHeader("Cache-Control", "no-cache")
+                .setBody(""));
+
+        PolicyCheckerTaskParams taskParams = new PolicyCheckerTaskParams(goodConfig, subjectKey);
+        task.init(taskParams,taskCompleted);
+        task.execute();
+        signal.await();
+        server.shutdown();
+        assertFalse(testResult.has("outcome"));
+        assertTrue(testResult.has("errorCode"));
+        assertEquals("Null or Empty Response from Policy Checker Server", testResult.getString("errorCode"));
+
+    }
 }
